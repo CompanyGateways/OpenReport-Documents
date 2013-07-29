@@ -33,7 +33,7 @@ a.fork-button {
   color: #ffffff;
   float: right;
 }
-a.download-button {
+/*a.download-button {
   width: 202px;
   height: 80px;
   padding-left: 64px;
@@ -43,4 +43,45 @@ a.download-button {
   font-size: 21px;
   color: #ffffff;
   float: left;
+}*/
+ul.buttons  {
+  list-style:none;
+  padding:0;
+  margin: 0 0 10px 0px;
+}
+
+li.button  {
+  list-style-type: none;
+  width: 200px;
+  height: 48px;
+  margin-bottom: 12px;
+  margin-right: 10px;
+  line-height: 1em;
+  padding: 16px 6px 6px 7px;
+  float: left;
+  background: #ff6600;
+  border-radius: 4px;
+
+}
+li.button a{
+ 	-webkit-font-smoothing: antialiased;
+ 	font-weight: normal;
+	text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
+	padding: 2px 2px 2px 22px;
+	height: 30px;
+  color: white;
+}
+
+a.download-button {
+	background: url(../../images/arrow-down.png) no-repeat;
+
+}
+
+a.github-button {
+	background: url(../../images/octocat-small.png) no-repeat 1px;
+}
+
+a.download-button:hover {
+	color: #fff;
+	text-decoration: none;
 }

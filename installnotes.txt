@@ -1,0 +1,270 @@
+
+
+
+
+Demo Installation
+
+1. Clone files
+
+	git clone https://github.com/OpenReport/Client.git
+	git clone https://github.com/OpenReport/Access.git
+
+
+2. Copy Files
+
+	Client/*   -> /var/www/client
+	Access/*   -> /var/www/mobile
+
+
+3 - Setup Database (database.sql)
+
+	Create Database
+
+		delimiter $$
+
+		CREATE DATABASE `openreport` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci */$$
+
+	Add Tables
+
+
+		delimiter $$
+
+		CREATE TABLE `accounts` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(32) DEFAULT NULL,
+		  `name` varchar(96) DEFAULT NULL,
+		  `admin_email` varchar(45) DEFAULT NULL,
+		  `map_api_key` varchar(64) DEFAULT NULL,
+		  `date_created` date DEFAULT NULL,
+		  `account_limits` varchar(1024) DEFAULT '{"users":0, "records":0, "forms":0, "media":0}',
+		  `is_active` tinyint(4) DEFAULT '1',
+		  PRIMARY KEY (`id`),
+		  UNIQUE KEY `KEY` (`api_key`) USING BTREE,
+		  UNIQUE KEY `EMAIL_UNIQUE` (`admin_email`)
+		) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1$$
+
+		delimiter $$
+
+		CREATE TABLE `assignments` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
+		  `form_id` bigint(20) DEFAULT NULL,
+		  `user` varchar(128) COLLATE latin1_general_ci DEFAULT NULL,
+		  `identity` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `schedule` set('daily','weekly','monthly','yearly') COLLATE latin1_general_ci DEFAULT NULL,
+		  `repeat_schedule` smallint(6) DEFAULT '1',
+		  `date_assigned` datetime DEFAULT NULL,
+		  `date_expires` datetime DEFAULT NULL,
+		  `date_last_reported` datetime DEFAULT NULL,
+		  `status` set('open','closed') COLLATE latin1_general_ci DEFAULT NULL,
+		  `is_active` varchar(45) COLLATE latin1_general_ci DEFAULT '1',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci$$
+
+		delimiter $$
+
+		CREATE TABLE `distributions` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
+		  `user_role` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `form_tag` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `is_active` tinyint(4) DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci$$
+
+		delimiter $$
+
+		CREATE TABLE `forms` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `tags` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `title` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `description` varchar(1024) COLLATE latin1_general_ci NOT NULL,
+		  `identity_name` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `meta` text COLLATE latin1_general_ci,
+		  `report_version` int(11) DEFAULT NULL,
+		  `date_created` datetime DEFAULT NULL,
+		  `date_modified` datetime DEFAULT NULL,
+		  `is_public` tinyint(4) DEFAULT '0',
+		  `is_published` tinyint(4) DEFAULT '0',
+		  `is_deleted` tinyint(4) DEFAULT '0',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Open Report Form'$$
+
+		delimiter $$
+
+		CREATE TABLE `libaray` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(36) COLLATE latin1_general_ci DEFAULT NULL,
+		  `meta` longtext COLLATE latin1_general_ci,
+		  `role` set('field','fieldset') COLLATE latin1_general_ci DEFAULT NULL,
+		  `is_active` tinyint(4) DEFAULT '1',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci COMMENT='Libaray of Standard Controls'$$
+
+		delimiter $$
+
+		CREATE TABLE `records` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `form_id` bigint(20) DEFAULT NULL,
+		  `report_version` int(11) DEFAULT NULL,
+		  `meta` text COLLATE latin1_general_ci,
+		  `record_date` datetime DEFAULT NULL,
+		  `record_time_offset` char(5) COLLATE latin1_general_ci DEFAULT NULL,
+		  `user` varchar(512) COLLATE latin1_general_ci DEFAULT NULL,
+		  `lat` decimal(10,8) DEFAULT NULL COMMENT 'Records for task/event data',
+		  `lon` decimal(11,8) DEFAULT NULL,
+		  `score` mediumint(9) DEFAULT NULL,
+		  `identity` varchar(128) COLLATE latin1_general_ci DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci$$
+
+		delimiter $$
+
+		CREATE TABLE `reports` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(36) COLLATE latin1_general_ci DEFAULT NULL,
+		  `form_id` bigint(20) DEFAULT NULL,
+		  `form_name` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `version` int(11) DEFAULT NULL,
+		  `title` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  `meta` text COLLATE latin1_general_ci,
+		  `is_active` tinyint(4) DEFAULT '1',
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci$$
+
+		delimiter $$
+
+		CREATE TABLE `tags` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `api_key` varchar(32) COLLATE latin1_general_ci DEFAULT NULL,
+		  `scope` set('roles','reports') COLLATE latin1_general_ci DEFAULT NULL,
+		  `name` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+		  PRIMARY KEY (`id`)
+		) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci$$
+
+		delimiter $$
+
+		CREATE TABLE `users` (
+		  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+		  `username` varchar(64) DEFAULT NULL,
+		  `email` varchar(128) DEFAULT NULL,
+		  `password` varchar(16) DEFAULT NULL,
+		  `account_id` bigint(20) DEFAULT NULL,
+		  `roles` varchar(96) DEFAULT NULL,
+		  `date_created` date DEFAULT NULL,
+		  `date_modified` date DEFAULT NULL,
+		  `date_last_accessed` datetime DEFAULT NULL,
+		  `is_active` tinyint(4) DEFAULT '1',
+		  PRIMARY KEY (`id`),
+		  UNIQUE KEY `EMAIL` (`email`)
+		) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8$$
+
+
+4. Create Account (account.sql)
+
+	Create a Demo Account
+		INSERT INTO `openreport`.`accounts`
+		(`id`,
+		`admin_id`,
+		`name`,
+		`is_active`,
+		`api_key`)
+		VALUES
+		(
+		1,
+		1,
+		'OpenReport Demo'>,
+		1,
+		'7406f3491660b7b35b85f5381e511712'>
+		);
+
+
+	Create a Demo User
+
+		INSERT INTO `openreport`.`users`
+		(`id`,
+		`username`,
+		`email`,
+		`password`,
+		`account_id`,
+		`roles`,
+		`date_created`,
+		`date_modified`,
+		`is_active`)
+		VALUES
+		(
+		1,
+		'Demo User',
+		'demo@email.com',
+		'demo123',
+		1,
+		now(),
+		now()>,
+		1>
+		);
+
+5. Add Sample Data (sample.sql)
+
+
+6. Modify Code
+
+	/var/www/client/models/config.php - update connection string
+
+
+7. Set Up Apache (openreport.local)
+
+	/etc/apache2/sites-available
+
+	add -> VirtualHost file
+
+		#
+		#  openreport (/etc/apache2/sites-available/openreport.local)
+		#
+		# open report client interface
+		<VirtualHost *:80>
+			#ServerAdmin webmaster@example.com
+			ServerName  openreport.local
+
+			# Indexes + Directory Root.
+			DirectoryIndex index.php index.html
+			DocumentRoot /var/www/client/
+			<Directory /var/www/client/>
+				AllowOverride All
+			</Directory>
+
+			# Logfiles
+			ErrorLog  /var/www/client/logs/error.log
+			CustomLog /var/www/client/logs/access.log combined
+
+		</VirtualHost>
+
+		# open report mobile access
+		<VirtualHost *:80>
+			#ServerAdmin webmaster@example.com
+			ServerName  m.openreport.local
+
+			# Indexes + Directory Root.
+			DirectoryIndex index.php index.html
+			DocumentRoot /var/www/mobile/
+			<Directory /var/www/mobile/>
+				AllowOverride All
+			</Directory>
+
+			# Logfiles
+			ErrorLog  /var/www/mobile/logs/error.log
+			CustomLog /var/www/mobile/logs/access.log combined
+
+		</VirtualHost>
+
+	activate sites
+		sudo a2ensite openreport.local
+
+	reload apache
+		/etc/init.d/apache2 reload
+
+	test connections
+
+		http://openreport.local - Client Access
+		http://m.openreport.local - Mobile Access
