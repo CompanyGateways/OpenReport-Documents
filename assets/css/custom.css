@@ -1,0 +1,46 @@
+body {
+  padding-top: 50px;
+}
+.section-header {
+  margin: 15px 0px;
+  padding: 0 55px;
+}
+h1, h2, h3{
+  color: #000086;
+}
+h2 a{
+  color: #000086;
+}
+a.navbar-brand{
+  color: #000086;
+  padding-top: 11px;
+}
+a.navbar-brand i{
+  color: #ff6600;
+}
+h1 i, h2 i{
+  color: #ff6600;
+  font-size: 28px;
+}
+a.fork-button {
+  width: 202px;
+  height: 80px;
+  padding-left: 64px;
+  display: block;
+  background: transparent url(../../images/github-button.png) 0 0 no-repeat;
+  padding-top: 29px;
+  font-size: 21px;
+  color: #ffffff;
+  float: right;
+}
+a.download-button {
+  width: 202px;
+  height: 80px;
+  padding-left: 64px;
+  display: block;
+  background: transparent url(../../images/download-button.png) 0 0 no-repeat;
+  padding-top: 29px;
+  font-size: 21px;
+  color: #ffffff;
+  float: left;
+}
