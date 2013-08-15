@@ -22,28 +22,7 @@ h1 i, h2 i{
   color: #ff6600;
   font-size: 28px;
 }
-a.fork-button {
-  width: 202px;
-  height: 80px;
-  padding-left: 64px;
-  display: block;
-  background: transparent url(../../images/github-button.png) 0 0 no-repeat;
-  padding-top: 29px;
-  font-size: 21px;
-  color: #ffffff;
-  float: right;
-}
-/*a.download-button {
-  width: 202px;
-  height: 80px;
-  padding-left: 64px;
-  display: block;
-  background: transparent url(../../images/download-button.png) 0 0 no-repeat;
-  padding-top: 29px;
-  font-size: 21px;
-  color: #ffffff;
-  float: left;
-}*/
+
 ul.buttons  {
   list-style:none;
   padding:0;
